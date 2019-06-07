@@ -11,7 +11,7 @@ import SwiftUI
 
 struct RepositoryListRow: View {
 
-    @ObjectBinding var repository: Repository
+    @State var repository: Repository
 
     var body: some View {
         NavigationButton(destination: RepositoryDetailView(viewModel: .init(repository: repository))) {
