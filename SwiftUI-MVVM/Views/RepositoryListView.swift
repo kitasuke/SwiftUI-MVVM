@@ -9,8 +9,7 @@
 import SwiftUI
 
 struct RepositoryListView : View {
-    // @ObjectBinding is appropriate, but it crashes somehow
-    @EnvironmentObject var viewModel: RepositoryListViewModel
+    @ObjectBinding var viewModel: RepositoryListViewModel
     
     var body: some View {
         NavigationView {
@@ -26,7 +25,7 @@ struct RepositoryListView : View {
 #if DEBUG
 struct RepositoryListView_Previews : PreviewProvider {
     static var previews: some View {
-        RepositoryListView()
+        RepositoryListView(viewModel: .init())
     }
 }
 #endif

@@ -21,8 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         // Use a UIHostingController as window root view controller
         let window = UIWindow(frame: UIScreen.main.bounds)
-        let rootView = RepositoryListView()
-            .environmentObject(RepositoryListViewModel())
+        let rootView = RepositoryListView(viewModel: .init())
         window.rootViewController = UIHostingController(rootView: rootView)
         self.window = window
         window.makeKeyAndVisible()
