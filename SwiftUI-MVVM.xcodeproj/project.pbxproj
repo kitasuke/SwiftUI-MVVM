@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EC0BD0BF22ADACEE005B9FCC /* AnySubscription.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC0BD0BE22ADACEE005B9FCC /* AnySubscription.swift */; };
 		EC4F04DD22AA3BFD0086819B /* APIService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F04DC22AA3BFD0086819B /* APIService.swift */; };
 		EC4F04DF22AA3C170086819B /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F04DE22AA3C170086819B /* APIServiceError.swift */; };
 		EC4F04E122AA44880086819B /* RepositoryListViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC4F04E022AA44880086819B /* RepositoryListViewModelTests.swift */; };
@@ -41,6 +42,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		EC0BD0BE22ADACEE005B9FCC /* AnySubscription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnySubscription.swift; sourceTree = "<group>"; };
 		EC4F04DC22AA3BFD0086819B /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		EC4F04DE22AA3C170086819B /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
 		EC4F04E022AA44880086819B /* RepositoryListViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryListViewModelTests.swift; sourceTree = "<group>"; };
@@ -166,6 +168,7 @@
 				EC6D6ABE22A87B8B00F21E11 /* SearchRepositoryResponse.swift */,
 				EC6D6AC022A87BB100F21E11 /* Repository.swift */,
 				EC6D6ACA22A8910600F21E11 /* User.swift */,
+				EC0BD0BE22ADACEE005B9FCC /* AnySubscription.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -295,6 +298,7 @@
 				EC6D6ACD22A8930B00F21E11 /* RepositoryDetailView.swift in Sources */,
 				EC6D6AC922A88E9000F21E11 /* RepositoryListRow.swift in Sources */,
 				EC4F04DD22AA3BFD0086819B /* APIService.swift in Sources */,
+				EC0BD0BF22ADACEE005B9FCC /* AnySubscription.swift in Sources */,
 				EC6D6AC722A88E2000F21E11 /* RepositoryListViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -26,6 +26,8 @@ extension URLSession {
                     subscriber.receive(completion: .finished)
                 }
             }
+            
+            subscriber.receive(subscription: AnySubscription { task.cancel() })
             task.resume()
         }
     }
