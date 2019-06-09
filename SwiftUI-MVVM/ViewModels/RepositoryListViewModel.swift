@@ -16,6 +16,14 @@ final class RepositoryListViewModel: BindableObject {
     private var cancellables: [AnyCancellable] = []
     
     // MARK: Input
+    enum Input {
+        case onAppear
+    }
+    func apply(_ input: Input) {
+        switch input {
+        case .onAppear: onAppearSubject.send(())
+        }
+    }
     private let onAppearSubject = PassthroughSubject<Void, Never>()
     
     // MARK: Output
@@ -58,10 +66,6 @@ final class RepositoryListViewModel: BindableObject {
             .share()
             .subscribe(responseSubject)
         
-        let repositoriesStream = responsePublisher
-            .map { $0.items }
-            .assign(to: \.repositories, on: self)
-        
         _ = trackingSubject
             .sink(receiveValue: trackerService.log)
         
@@ -69,19 +73,26 @@ final class RepositoryListViewModel: BindableObject {
             .map { .listView }
             .subscribe(trackingSubject)
         
+        cancellables += [
+            responseStream,
+            trackingStream
+        ]
+        
+        bindViews()
+    }
+    
+    private func bindViews() {
+        let repositoriesStream = responseSubject
+            .map { $0.items }
+            .assign(to: \.repositories, on: self)
+        
         let errorStream = errorSubject
             .map { _ in true }
             .assign(to: \.isErrorShown, on: self)
         
         cancellables += [
-            responseStream,
             repositoriesStream,
-            trackingStream,
             errorStream
         ]
-    }
-    
-    func onAppear() {
-        onAppearSubject.send(())
     }
 }

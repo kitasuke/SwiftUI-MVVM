@@ -18,7 +18,7 @@ struct RepositoryListView : View {
             }
             .navigationBarTitle(Text("Repositories"))
         }
-        .onAppear(perform: { self.viewModel.onAppear() })
+        .onAppear(perform: { self.viewModel.apply(.onAppear) })
     }
 }
 

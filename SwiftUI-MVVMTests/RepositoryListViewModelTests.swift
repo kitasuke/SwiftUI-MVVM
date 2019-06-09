@@ -33,7 +33,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         _ = viewModel.didChangeRepositoriesSubject
             .sink(receiveValue: { _ in updated = true })
         
-        viewModel.onAppear()
+        viewModel.apply(.onAppear)
         XCTAssertTrue(updated)
     }
     
@@ -41,7 +41,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         let trackerService = MockTrackerService()
         let viewModel = makeViewModel(trackerService: trackerService)
         
-        viewModel.onAppear()
+        viewModel.apply(.onAppear)
         XCTAssertTrue(trackerService.loggedTypes.contains(.listView))
     }
     
