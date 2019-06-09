@@ -13,21 +13,21 @@ import Combine
 final class RepositoryListViewModel: BindableObject {    
     let didChange: AnyPublisher<Void, Never>
     private let didChangeSubject = PassthroughSubject<Void, Never>()
+    private var cancellables: [AnyCancellable] = []
     
     // MARK: Input
     private let onAppearSubject = PassthroughSubject<Void, Never>()
     
     // MARK: Output
     private(set) var repositories: [Repository] = []
-    private var repositoriesStream: AnyCancellable?
-    let repositoriesSubject = PassthroughSubject<[Repository], Never>()
+    let responseSubject = PassthroughSubject<SearchRepositoryResponse, Never>()
+    let errorSubject = PassthroughSubject<APIServiceError, Never>()
     
-    private var trackingStream: AnyCancellable?
     let trackingSubject = PassthroughSubject<TrackEventType, Never>()
     
     init(apiService: APIServiceType = APIService(),
          trackerService: TrackerType = TrackerService()) {
-        didChange = repositoriesSubject
+        didChange = responseSubject
             .map { _ in () }
             .eraseToAnyPublisher()
         
@@ -37,27 +37,32 @@ final class RepositoryListViewModel: BindableObject {
             .init(name: "order", value: "desc")
         ]
         
-        repositoriesStream = onAppearSubject
+        let responsePublisher = onAppearSubject
             .flatMap {
                 apiService.response(from: path,queryItems: queryItems)
-                    .catch { error in
-                        return Publishers.Empty<SearchRepositoryResponse, Never>()
+                    .catch { [weak self] error -> Publishers.Empty<SearchRepositoryResponse, Never> in
+                        self?.errorSubject.send(error)
+                        return .init()
                 }
             }
+            .eraseToAnyPublisher()
+        
+        let repositoriesStream = responsePublisher
             .map { $0.items }
-            .handleEvents(receiveOutput: { [weak self] in
-                self?.repositories = $0
-            })
-            .subscribe(repositoriesSubject)
+            .assign(to: \.repositories, on: self)
+        
+        let responseStream = responsePublisher
+            .share()
+            .subscribe(responseSubject)
         
         _ = trackingSubject
-            .sink { (type) in
-                trackerService.log(type: type)
-        }
+            .sink(receiveValue: trackerService.log)
         
-        trackingStream = onAppearSubject
+        let trackingStream = onAppearSubject
             .map { .listView }
             .subscribe(trackingSubject)
+        
+        cancellables += [responseStream, repositoriesStream, trackingStream]
     }
     
     func onAppear() {
