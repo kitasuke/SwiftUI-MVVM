@@ -22,7 +22,11 @@ final class RepositoryListViewModel: BindableObject {
     private var repositoriesStream: AnyCancellable?
     let repositoriesSubject = PassthroughSubject<[Repository], Never>()
     
-    init(apiService: APIServiceType = APIService()) {
+    private var trackingStream: AnyCancellable?
+    let trackingSubject = PassthroughSubject<TrackEventType, Never>()
+    
+    init(apiService: APIServiceType = APIService(),
+         trackerService: TrackerType = TrackerService()) {
         didChange = repositoriesSubject
             .map { _ in () }
             .eraseToAnyPublisher()
@@ -33,7 +37,6 @@ final class RepositoryListViewModel: BindableObject {
             .init(name: "order", value: "desc")
         ]
         
-        // There should be a better way to trigger instead of flatMap
         repositoriesStream = onAppearSubject
             .flatMap {
                 apiService.response(from: path,queryItems: queryItems)
@@ -46,6 +49,15 @@ final class RepositoryListViewModel: BindableObject {
                 self?.repositories = $0
             })
             .subscribe(repositoriesSubject)
+        
+        _ = trackingSubject
+            .sink { (type) in
+                trackerService.log(type: type)
+        }
+        
+        trackingStream = onAppearSubject
+            .map { .listView }
+            .subscribe(trackingSubject)
     }
     
     func onAppear() {
