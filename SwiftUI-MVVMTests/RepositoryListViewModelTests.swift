@@ -33,7 +33,18 @@ final class RepositoryListViewModelTests: XCTestCase {
         XCTAssertTrue(updated)
     }
     
-    private func makeViewModel(apiService: APIServiceType = MockAPIService()) -> RepositoryListViewModel {
-        return RepositoryListViewModel(apiService: apiService)
+    func test_logListViewWhenOnAppear() {
+        let trackerService = MockTrackerService()
+        let viewModel = makeViewModel(trackerService: trackerService)
+        
+        viewModel.onAppear()
+        XCTAssertTrue(trackerService.loggedTypes.contains(.listView))
+    }
+    
+    private func makeViewModel(
+        apiService: APIServiceType = MockAPIService(),
+        trackerService: TrackerType = MockTrackerService()
+        ) -> RepositoryListViewModel {
+        return RepositoryListViewModel(apiService: apiService, trackerService: trackerService)
     }
 }

@@ -26,6 +26,8 @@
 		EC6D6ACB22A8910600F21E11 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ACA22A8910600F21E11 /* User.swift */; };
 		EC6D6ACD22A8930B00F21E11 /* RepositoryDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ACC22A8930B00F21E11 /* RepositoryDetailView.swift */; };
 		EC6D6ACF22A8962100F21E11 /* RepositoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ACE22A8962100F21E11 /* RepositoryDetailViewModel.swift */; };
+		EC7603AE22AC93DD00E8849D /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603AD22AC93DD00E8849D /* TrackerService.swift */; };
+		EC7603B022AC97A400E8849D /* MockTrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603AF22AC97A400E8849D /* MockTrackerService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -62,6 +64,8 @@
 		EC6D6ACA22A8910600F21E11 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		EC6D6ACC22A8930B00F21E11 /* RepositoryDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailView.swift; sourceTree = "<group>"; };
 		EC6D6ACE22A8962100F21E11 /* RepositoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailViewModel.swift; sourceTree = "<group>"; };
+		EC7603AD22AC93DD00E8849D /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
+		EC7603AF22AC97A400E8849D /* MockTrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrackerService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +135,7 @@
 				EC6D6AAB22A8700500F21E11 /* SwiftUI_MVVMTests.swift */,
 				EC4F04E022AA44880086819B /* RepositoryListViewModelTests.swift */,
 				EC4F04E222AA45E70086819B /* MockAPISearvice.swift */,
+				EC7603AF22AC97A400E8849D /* MockTrackerService.swift */,
 				EC6D6AAD22A8700500F21E11 /* Info.plist */,
 			);
 			path = "SwiftUI-MVVMTests";
@@ -171,6 +176,7 @@
 				EC6D6ABA22A8716F00F21E11 /* URLSession+Combine.swift */,
 				EC4F04DC22AA3BFD0086819B /* APIService.swift */,
 				EC4F04DE22AA3C170086819B /* APIServiceError.swift */,
+				EC7603AD22AC93DD00E8849D /* TrackerService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -276,6 +282,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EC7603AE22AC93DD00E8849D /* TrackerService.swift in Sources */,
 				EC6D6AC522A88E1500F21E11 /* RepositoryListView.swift in Sources */,
 				EC6D6AC122A87BB100F21E11 /* Repository.swift in Sources */,
 				EC6D6ABF22A87B8B00F21E11 /* SearchRepositoryResponse.swift in Sources */,
@@ -298,6 +305,7 @@
 			files = (
 				EC4F04E122AA44880086819B /* RepositoryListViewModelTests.swift in Sources */,
 				EC4F04E322AA45E70086819B /* MockAPISearvice.swift in Sources */,
+				EC7603B022AC97A400E8849D /* MockTrackerService.swift in Sources */,
 				EC6D6AAC22A8700500F21E11 /* SwiftUI_MVVMTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
