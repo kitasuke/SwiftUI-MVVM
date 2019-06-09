@@ -33,20 +33,30 @@ final class RepositoryListViewModel: BindableObject {
     private(set) var isErrorShown = false {
         didSet { didChangeIsErrorShownSubject.send(()) }
     }
-    
     let didChangeIsErrorShownSubject = PassthroughSubject<Void, Never>()
     let didChangeRepositoriesSubject = PassthroughSubject<Void, Never>()
+    
     private let responseSubject = PassthroughSubject<SearchRepositoryResponse, Never>()
     private let errorSubject = PassthroughSubject<APIServiceError, Never>()
     private let trackingSubject = PassthroughSubject<TrackEventType, Never>()
     
+    private let apiService: APIServiceType
+    private let trackerService: TrackerType
     init(apiService: APIServiceType = APIService(),
          trackerService: TrackerType = TrackerService()) {
+        self.apiService = apiService
+        self.trackerService = trackerService
+        
         didChange = didChangeRepositoriesSubject
             .merge(with: didChangeIsErrorShownSubject)
             .map { _ in () }
             .eraseToAnyPublisher()
         
+        bindData()
+        bindViews()
+    }
+    
+    private func bindData() {
         let path = "/search/repositories"
         let queryItems: [URLQueryItem] = [
             .init(name: "q", value: "SwiftUI"),
@@ -54,13 +64,13 @@ final class RepositoryListViewModel: BindableObject {
         ]
         
         let responsePublisher = onAppearSubject
-            .flatMap {
+            .flatMap { [apiService] _ in
                 apiService.response(from: path,queryItems: queryItems)
                     .catch { [weak self] error -> Publishers.Empty<SearchRepositoryResponse, Never> in
                         self?.errorSubject.send(error)
                         return .init()
                 }
-            }
+        }
         
         let responseStream = responsePublisher
             .share()
@@ -77,8 +87,6 @@ final class RepositoryListViewModel: BindableObject {
             responseStream,
             trackingStream
         ]
-        
-        bindViews()
     }
     
     private func bindViews() {
