@@ -15,18 +15,22 @@ final class RepositoryListViewModelTests: XCTestCase {
     
     func test_didChange() {
         let viewModel = makeViewModel()
-        var didChange = false
+        var didChanges: [Bool] = []
         _ = viewModel.didChange
-            .sink(receiveValue: { _ in didChange = true })
+            .sink(receiveValue: { _ in didChanges.append(true) })
         
-        viewModel.responseSubject.send(.init(items: []))
-        XCTAssertTrue(didChange)
+        let allDidChangeSubjects = [
+            viewModel.didChangeRepositoriesSubject
+        ]
+        
+        allDidChangeSubjects.forEach { $0.send(()) }
+        XCTAssertEqual(allDidChangeSubjects.count, didChanges.count)
     }
     
     func test_updateRepositoriesWhenOnAppear() {
         let viewModel = makeViewModel()
         var updated = false
-        _ = viewModel.responseSubject
+        _ = viewModel.didChangeRepositoriesSubject
             .sink(receiveValue: { _ in updated = true })
         
         viewModel.onAppear()
