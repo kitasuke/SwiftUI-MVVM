@@ -21,7 +21,8 @@ final class RepositoryListViewModelTests: XCTestCase {
         
         let allDidChangeSubjects = [
             viewModel.didChangeRepositoriesSubject,
-            viewModel.didChangeIsErrorShownSubject
+            viewModel.didChangeIsErrorShownSubject,
+            viewModel.didChangeShouldShowIcon
         ]
         
         allDidChangeSubjects.forEach { $0.send(()) }
@@ -76,10 +77,33 @@ final class RepositoryListViewModelTests: XCTestCase {
         XCTAssertTrue(trackerService.loggedTypes.contains(.listView))
     }
     
+    func test_showIconEnabledWhenOnAppear() {
+        let experimentService = MockExperimentService()
+        experimentService.stubs[.showIcon] = true
+        let viewModel = makeViewModel(experimentService: experimentService)
+
+        viewModel.apply(.onAppear)
+        XCTAssertTrue(viewModel.shouldShowIcon)
+    }
+    
+    func test_showIconDisabledWhenOnAppear() {
+        let experimentService = MockExperimentService()
+        experimentService.stubs[.showIcon] = false
+        let viewModel = makeViewModel(experimentService: experimentService)
+        
+        viewModel.apply(.onAppear)
+        XCTAssertFalse(viewModel.shouldShowIcon)
+    }
+    
     private func makeViewModel(
         apiService: APIServiceType = MockAPIService(),
-        trackerService: TrackerType = MockTrackerService()
+        trackerService: TrackerType = MockTrackerService(),
+        experimentService: ExperimentServiceType = MockExperimentService()
         ) -> RepositoryListViewModel {
-        return RepositoryListViewModel(apiService: apiService, trackerService: trackerService)
+        return RepositoryListViewModel(
+            apiService: apiService,
+            trackerService: trackerService,
+            experimentService: experimentService
+        )
     }
 }

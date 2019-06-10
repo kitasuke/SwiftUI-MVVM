@@ -33,8 +33,12 @@ final class RepositoryListViewModel: BindableObject {
     private(set) var isErrorShown = false {
         didSet { didChangeIsErrorShownSubject.send(()) }
     }
+    private(set) var shouldShowIcon = false {
+        didSet { didChangeShouldShowIcon.send(()) }
+    }
     let didChangeIsErrorShownSubject = PassthroughSubject<Void, Never>()
     let didChangeRepositoriesSubject = PassthroughSubject<Void, Never>()
+    let didChangeShouldShowIcon = PassthroughSubject<Void, Never>()
     
     private let responseSubject = PassthroughSubject<SearchRepositoryResponse, Never>()
     private let errorSubject = PassthroughSubject<APIServiceError, Never>()
@@ -42,13 +46,19 @@ final class RepositoryListViewModel: BindableObject {
     
     private let apiService: APIServiceType
     private let trackerService: TrackerType
+    private let experimentService: ExperimentServiceType
     init(apiService: APIServiceType = APIService(),
-         trackerService: TrackerType = TrackerService()) {
+         trackerService: TrackerType = TrackerService(),
+         experimentService: ExperimentServiceType = ExperimentService()) {
         self.apiService = apiService
         self.trackerService = trackerService
+        self.experimentService = experimentService
         
         didChange = didChangeRepositoriesSubject
-            .merge(with: didChangeIsErrorShownSubject)
+            .merge(
+                with: didChangeIsErrorShownSubject,
+                didChangeShouldShowIcon
+            )
             .map { _ in () }
             .eraseToAnyPublisher()
         
@@ -93,9 +103,16 @@ final class RepositoryListViewModel: BindableObject {
             .map { _ in true }
             .assign(to: \.isErrorShown, on: self)
         
+        let showIconStream = onAppearSubject
+            .map { [experimentService] _ in
+                experimentService.experiment(for: .showIcon)
+            }
+            .assign(to: \.shouldShowIcon, on: self)
+        
         cancellables += [
             repositoriesStream,
-            errorStream
+            errorStream,
+            showIconStream
         ]
     }
 }
