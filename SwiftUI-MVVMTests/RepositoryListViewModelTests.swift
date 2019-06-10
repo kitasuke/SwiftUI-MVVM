@@ -20,7 +20,8 @@ final class RepositoryListViewModelTests: XCTestCase {
             .sink(receiveValue: { _ in didChanges.append(true) })
         
         let allDidChangeSubjects = [
-            viewModel.didChangeRepositoriesSubject
+            viewModel.didChangeRepositoriesSubject,
+            viewModel.didChangeIsErrorShownSubject
         ]
         
         allDidChangeSubjects.forEach { $0.send(()) }
@@ -28,13 +29,45 @@ final class RepositoryListViewModelTests: XCTestCase {
     }
     
     func test_updateRepositoriesWhenOnAppear() {
-        let viewModel = makeViewModel()
-        var updated = false
+        let apiService = MockAPIService()
+        apiService.stub(
+            for: "/search/repositories",
+            response: Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+                SearchRepositoryResponse(
+                    items: [
+                        .init(
+                            id: 1,
+                            fullName: "foo",
+                            owner: .init(id: 1, login: "bar", avatarUrl: URL(string: "http://baz.com")!)
+                        )
+                    ]
+                )
+            ).eraseToAnyPublisher()
+        )
+        let viewModel = makeViewModel(apiService: apiService)
+        var didChange = false
         _ = viewModel.didChangeRepositoriesSubject
-            .sink(receiveValue: { _ in updated = true })
+            .sink(receiveValue: { _ in didChange = true })
         
         viewModel.apply(.onAppear)
-        XCTAssertTrue(updated)
+        XCTAssertTrue(didChange)
+    }
+    
+    func test_serviceErrorWhenOnAppear() {
+        let apiService = MockAPIService()
+        apiService.stub(
+            for: "/search/repositories",
+            response: Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+                APIServiceError.responseError
+            ).eraseToAnyPublisher()
+        )
+        let viewModel = makeViewModel(apiService: apiService)
+        var didChange = false
+        _ = viewModel.didChangeIsErrorShownSubject
+            .sink(receiveValue: { _ in didChange = true })
+        
+        viewModel.apply(.onAppear)
+        XCTAssertTrue(didChange)
     }
     
     func test_logListViewWhenOnAppear() {
