@@ -57,15 +57,10 @@ final class RepositoryListViewModel: BindableObject {
     }
     
     private func bindData() {
-        let path = "/search/repositories"
-        let queryItems: [URLQueryItem] = [
-            .init(name: "q", value: "SwiftUI"),
-            .init(name: "order", value: "desc")
-        ]
-        
+        let request = SearchRepositoryRequest()
         let responsePublisher = onAppearSubject
             .flatMap { [apiService] _ in
-                apiService.response(from: path,queryItems: queryItems)
+                apiService.response(from: request)
                     .catch { [weak self] error -> Publishers.Empty<SearchRepositoryResponse, Never> in
                         self?.errorSubject.send(error)
                         return .init()

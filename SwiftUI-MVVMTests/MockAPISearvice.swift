@@ -11,19 +11,20 @@ import Combine
 @testable import SwiftUI_MVVM
 
 final class MockAPIService: APIServiceType {
-    var stubs: [String: Any] = [:]
+    var stubs: [Any] = []
     
-    func stub<Response>(for path: String, response: AnyPublisher<Response, APIServiceError>) where Response: Decodable {
-        stubs[path] = response
+    func stub<Request>(for type: Request.Type, response: @escaping ((Request) -> AnyPublisher<Request.Response, APIServiceError>)) where Request: APIRequestType {
+        stubs.append(response)
     }
     
-    func response<Response>(from path: String, queryItems: [URLQueryItem]) -> AnyPublisher<Response, APIServiceError> where Response : Decodable {
+    func response<Request>(from request: Request) -> AnyPublisher<Request.Response, APIServiceError> where Request: APIRequestType {
         
-        guard let response = stubs[path] as? AnyPublisher<Response, APIServiceError> else {
-            return Publishers.Empty<Response, APIServiceError>()
-                .eraseToAnyPublisher()
-        }
+        let response = stubs.compactMap { stub -> AnyPublisher<Request.Response, APIServiceError>? in
+            let stub = stub as? ((Request) -> AnyPublisher<Request.Response, APIServiceError>)
+            return stub?(request)
+        }.last
         
-        return response
+        return response ?? Publishers.Empty<Request.Response, APIServiceError>()
+            .eraseToAnyPublisher()
     }
 }

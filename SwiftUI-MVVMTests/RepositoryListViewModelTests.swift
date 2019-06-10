@@ -30,9 +30,8 @@ final class RepositoryListViewModelTests: XCTestCase {
     
     func test_updateRepositoriesWhenOnAppear() {
         let apiService = MockAPIService()
-        apiService.stub(
-            for: "/search/repositories",
-            response: Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+        apiService.stub(for: SearchRepositoryRequest.self) { _ in
+            Publishers.Once<SearchRepositoryResponse, APIServiceError>(
                 SearchRepositoryResponse(
                     items: [
                         .init(
@@ -42,8 +41,8 @@ final class RepositoryListViewModelTests: XCTestCase {
                         )
                     ]
                 )
-            ).eraseToAnyPublisher()
-        )
+                ).eraseToAnyPublisher()
+        }
         let viewModel = makeViewModel(apiService: apiService)
         var didChange = false
         _ = viewModel.didChangeRepositoriesSubject
@@ -55,12 +54,11 @@ final class RepositoryListViewModelTests: XCTestCase {
     
     func test_serviceErrorWhenOnAppear() {
         let apiService = MockAPIService()
-        apiService.stub(
-            for: "/search/repositories",
-            response: Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+        apiService.stub(for: SearchRepositoryRequest.self) { _ in
+            Publishers.Once<SearchRepositoryResponse, APIServiceError>(
                 APIServiceError.responseError
-            ).eraseToAnyPublisher()
-        )
+                ).eraseToAnyPublisher()
+        }
         let viewModel = makeViewModel(apiService: apiService)
         var didChange = false
         _ = viewModel.didChangeIsErrorShownSubject

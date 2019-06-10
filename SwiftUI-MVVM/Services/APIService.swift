@@ -9,8 +9,15 @@
 import Foundation
 import Combine
 
+protocol APIRequestType {
+    associatedtype Response: Decodable
+    
+    var path: String { get }
+    var queryItems: [URLQueryItem]? { get }
+}
+
 protocol APIServiceType {
-    func response<Response: Decodable>(from path: String, queryItems: [URLQueryItem]) -> AnyPublisher<Response, APIServiceError>
+    func response<Request>(from request: Request) -> AnyPublisher<Request.Response, APIServiceError> where Request: APIRequestType
 }
 
 final class APIService: APIServiceType {
@@ -20,12 +27,12 @@ final class APIService: APIServiceType {
         self.baseURL = baseURL
     }
 
-    func response<Response>(from path: String, queryItems: [URLQueryItem]) -> AnyPublisher<Response, APIServiceError> where Response : Decodable {
+    func response<Request>(from request: Request) -> AnyPublisher<Request.Response, APIServiceError> where Request: APIRequestType {
     
-    let pathURL = URL(string: path, relativeTo: baseURL)!
+    let pathURL = URL(string: request.path, relativeTo: baseURL)!
     
     var urlComponents = URLComponents(url: pathURL, resolvingAgainstBaseURL: true)!
-    urlComponents.queryItems = queryItems
+    urlComponents.queryItems = request.queryItems
     var request = URLRequest(url: urlComponents.url!)
     request.addValue("application/json", forHTTPHeaderField: "Content-Type")
     
@@ -34,7 +41,7 @@ final class APIService: APIServiceType {
     return URLSession.shared.send(request: request)
         .flatMap { data in
             Publishers.Just(data)
-                .decode(type: Response.self, decoder: decorder)
+                .decode(type: Request.Response.self, decoder: decorder)
                 .mapError(APIServiceError.parseError)
         }
         .eraseToAnyPublisher()

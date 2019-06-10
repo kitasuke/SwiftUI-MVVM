@@ -29,6 +29,7 @@
 		EC6D6ACF22A8962100F21E11 /* RepositoryDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ACE22A8962100F21E11 /* RepositoryDetailViewModel.swift */; };
 		EC7603AE22AC93DD00E8849D /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603AD22AC93DD00E8849D /* TrackerService.swift */; };
 		EC7603B022AC97A400E8849D /* MockTrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603AF22AC97A400E8849D /* MockTrackerService.swift */; };
+		EC7603B422ADD6FD00E8849D /* SearchRepositoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603B322ADD6FD00E8849D /* SearchRepositoryRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		EC6D6ACE22A8962100F21E11 /* RepositoryDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepositoryDetailViewModel.swift; sourceTree = "<group>"; };
 		EC7603AD22AC93DD00E8849D /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
 		EC7603AF22AC97A400E8849D /* MockTrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockTrackerService.swift; sourceTree = "<group>"; };
+		EC7603B322ADD6FD00E8849D /* SearchRepositoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepositoryRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +182,7 @@
 				EC4F04DC22AA3BFD0086819B /* APIService.swift */,
 				EC4F04DE22AA3C170086819B /* APIServiceError.swift */,
 				EC7603AD22AC93DD00E8849D /* TrackerService.swift */,
+				EC7603B322ADD6FD00E8849D /* SearchRepositoryRequest.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -292,6 +295,7 @@
 				EC6D6A9522A86FF900F21E11 /* AppDelegate.swift in Sources */,
 				EC6D6A9722A86FF900F21E11 /* SceneDelegate.swift in Sources */,
 				EC6D6ACF22A8962100F21E11 /* RepositoryDetailViewModel.swift in Sources */,
+				EC7603B422ADD6FD00E8849D /* SearchRepositoryRequest.swift in Sources */,
 				EC6D6ACB22A8910600F21E11 /* User.swift in Sources */,
 				EC4F04DF22AA3C170086819B /* APIServiceError.swift in Sources */,
 				EC6D6ABB22A8716F00F21E11 /* URLSession+Combine.swift in Sources */,
