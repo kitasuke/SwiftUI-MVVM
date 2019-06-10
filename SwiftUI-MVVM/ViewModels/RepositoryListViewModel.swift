@@ -30,9 +30,10 @@ final class RepositoryListViewModel: BindableObject {
     private(set) var repositories: [Repository] = [] {
         didSet { didChangeRepositoriesSubject.send(()) }
     }
-    private(set) var isErrorShown = false {
+    var isErrorShown = false {
         didSet { didChangeIsErrorShownSubject.send(()) }
     }
+    var errorMessage = ""
     private(set) var shouldShowIcon = false {
         didSet { didChangeShouldShowIcon.send(()) }
     }
@@ -99,6 +100,15 @@ final class RepositoryListViewModel: BindableObject {
             .map { $0.items }
             .assign(to: \.repositories, on: self)
         
+        let errorMessageStream = errorSubject
+            .map { error -> String in
+                switch error {
+                case .responseError: return "network error"
+                case .parseError: return "parse error"
+                }
+            }
+            .assign(to: \.errorMessage, on: self)
+        
         let errorStream = errorSubject
             .map { _ in true }
             .assign(to: \.isErrorShown, on: self)
@@ -112,6 +122,7 @@ final class RepositoryListViewModel: BindableObject {
         cancellables += [
             repositoriesStream,
             errorStream,
+            errorMessageStream,
             showIconStream
         ]
     }

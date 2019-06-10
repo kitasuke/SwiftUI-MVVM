@@ -16,6 +16,9 @@ struct RepositoryListView : View {
             List(viewModel.repositories) { repository in
                 RepositoryListRow(repository: repository)
             }
+            .presentation($viewModel.isErrorShown) { () -> Alert in
+                Alert(title: Text("Error"), message: Text(viewModel.errorMessage))
+            }
             .navigationBarTitle(Text("Repositories"))
         }
         .onAppear(perform: { self.viewModel.apply(.onAppear) })
