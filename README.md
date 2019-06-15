@@ -7,3 +7,9 @@ This idea can be achieved by Flux or Redux as well, but I chose MVVM first becau
 
 Xcode 11.0+ Beta  
 Swift 5.1+
+
+## More examples
+
+See other architectures as well
+
+- Flux: https://github.com/kitasuke/SwiftUI-Flux
