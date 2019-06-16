@@ -10,7 +10,10 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class RepositoryListViewModel: BindableObject {    
+final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType {
+    typealias InputType = Input
+    typealias OutputType = Output
+    
     let didChange: AnyPublisher<Void, Never>
     private let didChangeSubject = PassthroughSubject<Void, Never>()
     private var cancellables: [AnyCancellable] = []
@@ -27,19 +30,22 @@ final class RepositoryListViewModel: BindableObject {
     private let onAppearSubject = PassthroughSubject<Void, Never>()
     
     // MARK: Output
-    private(set) var repositories: [Repository] = [] {
-        didSet { didChangeRepositoriesSubject.send(()) }
+    struct Output {
+        var repositories: [Repository] = []
+        var isErrorShown = false
+        var errorMessage = ""
+        var shouldShowIcon = false
     }
-    var isErrorShown = false {
-        didSet { didChangeIsErrorShownSubject.send(()) }
+    private(set) var output = Output() {
+        didSet {
+            didChangeSubject.send(())
+        }
     }
-    var errorMessage = ""
-    private(set) var shouldShowIcon = false {
-        didSet { didChangeShouldShowIcon.send(()) }
+    // Workaround. Will be fixed later not to have redundant property for keypath setter
+    var isErrorShown: Bool {
+        get { return output.isErrorShown }
+        set { output.isErrorShown = newValue }
     }
-    let didChangeIsErrorShownSubject = PassthroughSubject<Void, Never>()
-    let didChangeRepositoriesSubject = PassthroughSubject<Void, Never>()
-    let didChangeShouldShowIcon = PassthroughSubject<Void, Never>()
     
     private let responseSubject = PassthroughSubject<SearchRepositoryResponse, Never>()
     private let errorSubject = PassthroughSubject<APIServiceError, Never>()
@@ -55,19 +61,13 @@ final class RepositoryListViewModel: BindableObject {
         self.trackerService = trackerService
         self.experimentService = experimentService
         
-        didChange = didChangeRepositoriesSubject
-            .merge(
-                with: didChangeIsErrorShownSubject,
-                didChangeShouldShowIcon
-            )
-            .map { _ in () }
-            .eraseToAnyPublisher()
+        didChange = didChangeSubject.eraseToAnyPublisher()
         
-        bindData()
-        bindViews()
+        bindInputs()
+        bindOutputs()
     }
     
-    private func bindData() {
+    private func bindInputs() {
         let request = SearchRepositoryRequest()
         let responsePublisher = onAppearSubject
             .flatMap { [apiService] _ in
@@ -95,10 +95,10 @@ final class RepositoryListViewModel: BindableObject {
         ]
     }
     
-    private func bindViews() {
+    private func bindOutputs() {
         let repositoriesStream = responseSubject
             .map { $0.items }
-            .assign(to: \.repositories, on: self)
+            .assign(to: \.output.repositories, on: self)
         
         let errorMessageStream = errorSubject
             .map { error -> String in
@@ -107,17 +107,17 @@ final class RepositoryListViewModel: BindableObject {
                 case .parseError: return "parse error"
                 }
             }
-            .assign(to: \.errorMessage, on: self)
+            .assign(to: \.output.errorMessage, on: self)
         
         let errorStream = errorSubject
             .map { _ in true }
-            .assign(to: \.isErrorShown, on: self)
+            .assign(to: \.output.isErrorShown, on: self)
         
         let showIconStream = onAppearSubject
             .map { [experimentService] _ in
                 experimentService.experiment(for: .showIcon)
             }
-            .assign(to: \.shouldShowIcon, on: self)
+            .assign(to: \..output.shouldShowIcon, on: self)
         
         cancellables += [
             repositoriesStream,

@@ -32,6 +32,7 @@
 		EC7603B222ACA26B00E8849D /* ExperimentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603B122ACA26B00E8849D /* ExperimentService.swift */; };
 		EC7603B422ADD6FD00E8849D /* SearchRepositoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603B322ADD6FD00E8849D /* SearchRepositoryRequest.swift */; };
 		EC7603B822AE158600E8849D /* MockExperimentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7603B722AE158600E8849D /* MockExperimentService.swift */; };
+		ECC7A44C22B690F800C82053 /* UnidirectionalDataFlowType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECC7A44B22B690F800C82053 /* UnidirectionalDataFlowType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -74,6 +75,7 @@
 		EC7603B122ACA26B00E8849D /* ExperimentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExperimentService.swift; sourceTree = "<group>"; };
 		EC7603B322ADD6FD00E8849D /* SearchRepositoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepositoryRequest.swift; sourceTree = "<group>"; };
 		EC7603B722AE158600E8849D /* MockExperimentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockExperimentService.swift; sourceTree = "<group>"; };
+		ECC7A44B22B690F800C82053 /* UnidirectionalDataFlowType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnidirectionalDataFlowType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 			children = (
 				EC6D6AC622A88E2000F21E11 /* RepositoryListViewModel.swift */,
 				EC6D6ACE22A8962100F21E11 /* RepositoryDetailViewModel.swift */,
+				ECC7A44B22B690F800C82053 /* UnidirectionalDataFlowType.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ECC7A44C22B690F800C82053 /* UnidirectionalDataFlowType.swift in Sources */,
 				EC7603AE22AC93DD00E8849D /* TrackerService.swift in Sources */,
 				EC6D6AC522A88E1500F21E11 /* RepositoryListView.swift in Sources */,
 				EC6D6AC122A87BB100F21E11 /* Repository.swift in Sources */,

@@ -13,22 +13,6 @@ import XCTest
 
 final class RepositoryListViewModelTests: XCTestCase {
     
-    func test_didChange() {
-        let viewModel = makeViewModel()
-        var didChanges: [Bool] = []
-        _ = viewModel.didChange
-            .sink(receiveValue: { _ in didChanges.append(true) })
-        
-        let allDidChangeSubjects = [
-            viewModel.didChangeRepositoriesSubject,
-            viewModel.didChangeIsErrorShownSubject,
-            viewModel.didChangeShouldShowIcon
-        ]
-        
-        allDidChangeSubjects.forEach { $0.send(()) }
-        XCTAssertEqual(allDidChangeSubjects.count, didChanges.count)
-    }
-    
     func test_updateRepositoriesWhenOnAppear() {
         let apiService = MockAPIService()
         apiService.stub(for: SearchRepositoryRequest.self) { _ in
@@ -45,12 +29,8 @@ final class RepositoryListViewModelTests: XCTestCase {
                 ).eraseToAnyPublisher()
         }
         let viewModel = makeViewModel(apiService: apiService)
-        var didChange = false
-        _ = viewModel.didChangeRepositoriesSubject
-            .sink(receiveValue: { _ in didChange = true })
-        
         viewModel.apply(.onAppear)
-        XCTAssertTrue(didChange)
+        XCTAssertTrue(!viewModel.output.repositories.isEmpty)
     }
     
     func test_serviceErrorWhenOnAppear() {
@@ -61,12 +41,8 @@ final class RepositoryListViewModelTests: XCTestCase {
                 ).eraseToAnyPublisher()
         }
         let viewModel = makeViewModel(apiService: apiService)
-        var didChange = false
-        _ = viewModel.didChangeIsErrorShownSubject
-            .sink(receiveValue: { _ in didChange = true })
-        
         viewModel.apply(.onAppear)
-        XCTAssertTrue(didChange)
+        XCTAssertTrue(viewModel.output.isErrorShown)
     }
     
     func test_logListViewWhenOnAppear() {
@@ -83,7 +59,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         let viewModel = makeViewModel(experimentService: experimentService)
 
         viewModel.apply(.onAppear)
-        XCTAssertTrue(viewModel.shouldShowIcon)
+        XCTAssertTrue(viewModel.output.shouldShowIcon)
     }
     
     func test_showIconDisabledWhenOnAppear() {
@@ -92,7 +68,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         let viewModel = makeViewModel(experimentService: experimentService)
         
         viewModel.apply(.onAppear)
-        XCTAssertFalse(viewModel.shouldShowIcon)
+        XCTAssertFalse(viewModel.output.shouldShowIcon)
     }
     
     private func makeViewModel(

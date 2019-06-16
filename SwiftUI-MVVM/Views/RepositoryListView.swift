@@ -13,11 +13,11 @@ struct RepositoryListView : View {
     
     var body: some View {
         NavigationView {
-            List(viewModel.repositories) { repository in
+            List(viewModel.output.repositories) { repository in
                 RepositoryListRow(repository: repository)
             }
             .presentation($viewModel.isErrorShown) { () -> Alert in
-                Alert(title: Text("Error"), message: Text(viewModel.errorMessage))
+                Alert(title: Text("Error"), message: Text(viewModel.output.errorMessage))
             }
             .navigationBarTitle(Text("Repositories"))
         }
