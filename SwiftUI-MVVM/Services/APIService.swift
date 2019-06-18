@@ -29,21 +29,21 @@ final class APIService: APIServiceType {
 
     func response<Request>(from request: Request) -> AnyPublisher<Request.Response, APIServiceError> where Request: APIRequestType {
     
-    let pathURL = URL(string: request.path, relativeTo: baseURL)!
-    
-    var urlComponents = URLComponents(url: pathURL, resolvingAgainstBaseURL: true)!
-    urlComponents.queryItems = request.queryItems
-    var request = URLRequest(url: urlComponents.url!)
-    request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    
-    let decorder = JSONDecoder()
-    decorder.keyDecodingStrategy = .convertFromSnakeCase
-    return URLSession.shared.send(request: request)
-        .flatMap { data in
-            Publishers.Just(data)
-                .decode(type: Request.Response.self, decoder: decorder)
-                .mapError(APIServiceError.parseError)
-        }
-        .eraseToAnyPublisher()
+        let pathURL = URL(string: request.path, relativeTo: baseURL)!
+        
+        var urlComponents = URLComponents(url: pathURL, resolvingAgainstBaseURL: true)!
+        urlComponents.queryItems = request.queryItems
+        var request = URLRequest(url: urlComponents.url!)
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let decorder = JSONDecoder()
+        decorder.keyDecodingStrategy = .convertFromSnakeCase
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .map { data, urlResponse in data }
+            .mapError { _ in APIServiceError.responseError }
+            .decode(type: Request.Response.self, decoder: decorder)
+            .mapError(APIServiceError.parseError)
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
     }
 }

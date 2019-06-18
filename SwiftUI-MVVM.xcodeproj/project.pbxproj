@@ -18,7 +18,6 @@
 		EC6D6A9E22A8700500F21E11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = EC6D6A9D22A8700500F21E11 /* Preview Assets.xcassets */; };
 		EC6D6AA122A8700500F21E11 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EC6D6A9F22A8700500F21E11 /* LaunchScreen.storyboard */; };
 		EC6D6AAC22A8700500F21E11 /* SwiftUI_MVVMTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6AAB22A8700500F21E11 /* SwiftUI_MVVMTests.swift */; };
-		EC6D6ABB22A8716F00F21E11 /* URLSession+Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ABA22A8716F00F21E11 /* URLSession+Combine.swift */; };
 		EC6D6ABF22A87B8B00F21E11 /* SearchRepositoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6ABE22A87B8B00F21E11 /* SearchRepositoryResponse.swift */; };
 		EC6D6AC122A87BB100F21E11 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6AC022A87BB100F21E11 /* Repository.swift */; };
 		EC6D6AC522A88E1500F21E11 /* RepositoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC6D6AC422A88E1500F21E11 /* RepositoryListView.swift */; };
@@ -61,7 +60,6 @@
 		EC6D6AA722A8700500F21E11 /* SwiftUI-MVVMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SwiftUI-MVVMTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC6D6AAB22A8700500F21E11 /* SwiftUI_MVVMTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUI_MVVMTests.swift; sourceTree = "<group>"; };
 		EC6D6AAD22A8700500F21E11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		EC6D6ABA22A8716F00F21E11 /* URLSession+Combine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "URLSession+Combine.swift"; sourceTree = "<group>"; };
 		EC6D6ABE22A87B8B00F21E11 /* SearchRepositoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepositoryResponse.swift; sourceTree = "<group>"; };
 		EC6D6AC022A87BB100F21E11 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		EC6D6AC422A88E1500F21E11 /* RepositoryListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RepositoryListView.swift; sourceTree = "<group>"; };
@@ -186,7 +184,6 @@
 		EC6D6AB922A8714200F21E11 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				EC6D6ABA22A8716F00F21E11 /* URLSession+Combine.swift */,
 				EC4F04DC22AA3BFD0086819B /* APIService.swift */,
 				EC4F04DE22AA3C170086819B /* APIServiceError.swift */,
 				EC7603AD22AC93DD00E8849D /* TrackerService.swift */,
@@ -309,7 +306,6 @@
 				EC6D6ACB22A8910600F21E11 /* User.swift in Sources */,
 				EC4F04DF22AA3C170086819B /* APIServiceError.swift in Sources */,
 				EC7603B222ACA26B00E8849D /* ExperimentService.swift in Sources */,
-				EC6D6ABB22A8716F00F21E11 /* URLSession+Combine.swift in Sources */,
 				EC6D6ACD22A8930B00F21E11 /* RepositoryDetailView.swift in Sources */,
 				EC6D6AC922A88E9000F21E11 /* RepositoryListRow.swift in Sources */,
 				EC4F04DD22AA3BFD0086819B /* APIService.swift in Sources */,

@@ -5,7 +5,7 @@ This idea can be achieved by Flux or Redux as well, but I chose MVVM first becau
 
 ## Requirements
 
-Xcode 11.0+ Beta  
+Xcode 11.0 Beta 2+  
 Swift 5.1+
 
 ## More examples
