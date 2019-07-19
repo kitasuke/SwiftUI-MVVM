@@ -14,8 +14,8 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
     typealias InputType = Input
     typealias OutputType = Output
     
-    let didChange: AnyPublisher<Void, Never>
-    private let didChangeSubject = PassthroughSubject<Void, Never>()
+    let willChange: AnyPublisher<Void, Never>
+    private let willChangeSubject = PassthroughSubject<Void, Never>()
     private var cancellables: [AnyCancellable] = []
     
     // MARK: Input
@@ -38,7 +38,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
     }
     private(set) var output = Output() {
         didSet {
-            didChangeSubject.send(())
+            willChangeSubject.send(())
         }
     }
     // Workaround. Will be fixed later not to have redundant property for keypath setter
@@ -61,7 +61,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
         self.trackerService = trackerService
         self.experimentService = experimentService
         
-        didChange = didChangeSubject.eraseToAnyPublisher()
+        willChange = willChangeSubject.eraseToAnyPublisher()
         
         bindInputs()
         bindOutputs()
@@ -72,7 +72,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
         let responsePublisher = onAppearSubject
             .flatMap { [apiService] _ in
                 apiService.response(from: request)
-                    .catch { [weak self] error -> Publishers.Empty<SearchRepositoryResponse, Never> in
+                    .catch { [weak self] error -> Empty<SearchRepositoryResponse, Never> in
                         self?.errorSubject.send(error)
                         return .init()
                 }

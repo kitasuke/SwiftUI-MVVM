@@ -16,17 +16,17 @@ final class RepositoryListViewModelTests: XCTestCase {
     func test_updateRepositoriesWhenOnAppear() {
         let apiService = MockAPIService()
         apiService.stub(for: SearchRepositoryRequest.self) { _ in
-            Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+            Result.Publisher(
                 SearchRepositoryResponse(
-                    items: [
-                        .init(
-                            id: 1,
-                            fullName: "foo",
-                            owner: .init(id: 1, login: "bar", avatarUrl: URL(string: "http://baz.com")!)
-                        )
-                    ]
-                )
-                ).eraseToAnyPublisher()
+                                    items: [
+                                        .init(
+                                            id: 1,
+                                            fullName: "foo",
+                                            owner: .init(id: 1, login: "bar", avatarUrl: URL(string: "http://baz.com")!)
+                                        )
+                                    ]
+                                )
+            ).eraseToAnyPublisher()
         }
         let viewModel = makeViewModel(apiService: apiService)
         viewModel.apply(.onAppear)
@@ -36,9 +36,9 @@ final class RepositoryListViewModelTests: XCTestCase {
     func test_serviceErrorWhenOnAppear() {
         let apiService = MockAPIService()
         apiService.stub(for: SearchRepositoryRequest.self) { _ in
-            Publishers.Once<SearchRepositoryResponse, APIServiceError>(
+            Result.Publisher(
                 APIServiceError.responseError
-                ).eraseToAnyPublisher()
+            ).eraseToAnyPublisher()
         }
         let viewModel = makeViewModel(apiService: apiService)
         viewModel.apply(.onAppear)

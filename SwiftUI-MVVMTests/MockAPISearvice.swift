@@ -24,7 +24,7 @@ final class MockAPIService: APIServiceType {
             return stub?(request)
         }.last
         
-        return response ?? Publishers.Empty<Request.Response, APIServiceError>()
+        return response ?? Empty<Request.Response, APIServiceError>()
             .eraseToAnyPublisher()
     }
 }

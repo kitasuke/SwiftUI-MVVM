@@ -11,13 +11,13 @@ import SwiftUI
 import Combine
 
 final class RepositoryDetailViewModel: BindableObject {
-    let didChange: AnyPublisher<RepositoryListViewModel, Never>
-    let didChangeSubject = PassthroughSubject<RepositoryListViewModel, Never>()
+    let willChange: AnyPublisher<RepositoryListViewModel, Never>
+    let willChangeSubject = PassthroughSubject<RepositoryListViewModel, Never>()
     
     let repository: Repository
     
     init(repository: Repository) {
-        didChange = AnyPublisher(didChangeSubject)
+        willChange = willChangeSubject.eraseToAnyPublisher()
         self.repository = repository
     }
 }
