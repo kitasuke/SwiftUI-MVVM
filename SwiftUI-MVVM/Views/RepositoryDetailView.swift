@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 struct RepositoryDetailView: View {
-    @ObjectBinding var viewModel: RepositoryDetailViewModel
+    @ObservedObject var viewModel: RepositoryDetailViewModel
     
     var body: some View {
         Text(viewModel.repository.fullName)

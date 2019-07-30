@@ -9,7 +9,7 @@
 import SwiftUI
 
 struct RepositoryListView : View {
-    @ObjectBinding var viewModel: RepositoryListViewModel
+    @ObservedObject var viewModel: RepositoryListViewModel
     
     var body: some View {
         NavigationView {

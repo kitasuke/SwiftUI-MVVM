@@ -10,12 +10,12 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType {
+final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowType {
     typealias InputType = Input
     typealias OutputType = Output
     
-    let willChange: AnyPublisher<Void, Never>
-    private let willChangeSubject = PassthroughSubject<Void, Never>()
+    let objectWillChange: AnyPublisher<Void, Never>
+    private let objectWillChangeSubject = PassthroughSubject<Void, Never>()
     private var cancellables: [AnyCancellable] = []
     
     // MARK: Input
@@ -38,7 +38,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
     }
     private(set) var output = Output() {
         didSet {
-            willChangeSubject.send(())
+            objectWillChangeSubject.send(())
         }
     }
     // Workaround. Will be fixed later not to have redundant property for keypath setter
@@ -61,7 +61,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
         self.trackerService = trackerService
         self.experimentService = experimentService
         
-        willChange = willChangeSubject.eraseToAnyPublisher()
+        objectWillChange = objectWillChangeSubject.eraseToAnyPublisher()
         
         bindInputs()
         bindOutputs()
@@ -82,7 +82,7 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
             .share()
             .subscribe(responseSubject)
         
-        _ = trackingSubject
+        let trackingSubjectStream = trackingSubject
             .sink(receiveValue: trackerService.log)
         
         let trackingStream = onAppearSubject
@@ -91,7 +91,8 @@ final class RepositoryListViewModel: BindableObject, UnidirectionalDataFlowType 
         
         cancellables += [
             responseStream,
-            trackingStream
+            trackingSubjectStream,
+            trackingStream,
         ]
     }
     

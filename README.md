@@ -8,7 +8,7 @@ This idea can be achieved by Flux or Redux as well, but I chose MVVM first becau
 
 ## Requirements
 
-Xcode 11.0 Beta 4+  
+Xcode 11.0 Beta 5+  
 Swift 5.1+
 
 ## More examples

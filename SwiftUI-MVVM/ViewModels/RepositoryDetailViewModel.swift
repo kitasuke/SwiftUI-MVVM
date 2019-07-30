@@ -10,14 +10,14 @@ import Foundation
 import SwiftUI
 import Combine
 
-final class RepositoryDetailViewModel: BindableObject {
-    let willChange: AnyPublisher<RepositoryListViewModel, Never>
-    let willChangeSubject = PassthroughSubject<RepositoryListViewModel, Never>()
+final class RepositoryDetailViewModel: ObservableObject {
+    let objectWillChange: AnyPublisher<RepositoryListViewModel, Never>
+    let objectWillChangeSubject = PassthroughSubject<RepositoryListViewModel, Never>()
     
     let repository: Repository
     
     init(repository: Repository) {
-        willChange = willChangeSubject.eraseToAnyPublisher()
+        objectWillChange = objectWillChangeSubject.eraseToAnyPublisher()
         self.repository = repository
     }
 }
