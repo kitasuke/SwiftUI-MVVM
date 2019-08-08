@@ -30,7 +30,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         }
         let viewModel = makeViewModel(apiService: apiService)
         viewModel.apply(.onAppear)
-        XCTAssertTrue(!viewModel.output.repositories.isEmpty)
+        XCTAssertTrue(!viewModel.repositories.isEmpty)
     }
     
     func test_serviceErrorWhenOnAppear() {
@@ -42,7 +42,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         }
         let viewModel = makeViewModel(apiService: apiService)
         viewModel.apply(.onAppear)
-        XCTAssertTrue(viewModel.output.isErrorShown)
+        XCTAssertTrue(viewModel.isErrorShown)
     }
     
     func test_logListViewWhenOnAppear() {
@@ -59,7 +59,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         let viewModel = makeViewModel(experimentService: experimentService)
 
         viewModel.apply(.onAppear)
-        XCTAssertTrue(viewModel.output.shouldShowIcon)
+        XCTAssertTrue(viewModel.shouldShowIcon)
     }
     
     func test_showIconDisabledWhenOnAppear() {
@@ -68,7 +68,7 @@ final class RepositoryListViewModelTests: XCTestCase {
         let viewModel = makeViewModel(experimentService: experimentService)
         
         viewModel.apply(.onAppear)
-        XCTAssertFalse(viewModel.output.shouldShowIcon)
+        XCTAssertFalse(viewModel.shouldShowIcon)
     }
     
     private func makeViewModel(

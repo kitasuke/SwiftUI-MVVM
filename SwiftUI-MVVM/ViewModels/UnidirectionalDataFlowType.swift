@@ -10,8 +10,6 @@ import Foundation
 
 protocol UnidirectionalDataFlowType {
     associatedtype InputType
-    associatedtype OutputType
     
     func apply(_ input: InputType)
-    var output: OutputType { get }
 }

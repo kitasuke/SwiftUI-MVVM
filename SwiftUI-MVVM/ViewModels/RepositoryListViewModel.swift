@@ -12,10 +12,7 @@ import Combine
 
 final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowType {
     typealias InputType = Input
-    typealias OutputType = Output
-    
-    let objectWillChange: AnyPublisher<Void, Never>
-    private let objectWillChangeSubject = PassthroughSubject<Void, Never>()
+
     private var cancellables: [AnyCancellable] = []
     
     // MARK: Input
@@ -30,22 +27,10 @@ final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowTyp
     private let onAppearSubject = PassthroughSubject<Void, Never>()
     
     // MARK: Output
-    struct Output {
-        var repositories: [Repository] = []
-        var isErrorShown = false
-        var errorMessage = ""
-        var shouldShowIcon = false
-    }
-    private(set) var output = Output() {
-        didSet {
-            objectWillChangeSubject.send(())
-        }
-    }
-    // Workaround. Will be fixed later not to have redundant property for keypath setter
-    var isErrorShown: Bool {
-        get { return output.isErrorShown }
-        set { output.isErrorShown = newValue }
-    }
+    @Published private(set) var repositories: [Repository] = []
+    @Published var isErrorShown = false
+    @Published var errorMessage = ""
+    @Published private(set) var shouldShowIcon = false
     
     private let responseSubject = PassthroughSubject<SearchRepositoryResponse, Never>()
     private let errorSubject = PassthroughSubject<APIServiceError, Never>()
@@ -60,8 +45,6 @@ final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowTyp
         self.apiService = apiService
         self.trackerService = trackerService
         self.experimentService = experimentService
-        
-        objectWillChange = objectWillChangeSubject.eraseToAnyPublisher()
         
         bindInputs()
         bindOutputs()
@@ -99,7 +82,7 @@ final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowTyp
     private func bindOutputs() {
         let repositoriesStream = responseSubject
             .map { $0.items }
-            .assign(to: \.output.repositories, on: self)
+            .assign(to: \.repositories, on: self)
         
         let errorMessageStream = errorSubject
             .map { error -> String in
@@ -108,17 +91,17 @@ final class RepositoryListViewModel: ObservableObject, UnidirectionalDataFlowTyp
                 case .parseError: return "parse error"
                 }
             }
-            .assign(to: \.output.errorMessage, on: self)
+            .assign(to: \.errorMessage, on: self)
         
         let errorStream = errorSubject
             .map { _ in true }
-            .assign(to: \.output.isErrorShown, on: self)
+            .assign(to: \.isErrorShown, on: self)
         
         let showIconStream = onAppearSubject
             .map { [experimentService] _ in
                 experimentService.experiment(for: .showIcon)
             }
-            .assign(to: \..output.shouldShowIcon, on: self)
+            .assign(to: \.shouldShowIcon, on: self)
         
         cancellables += [
             repositoriesStream,
